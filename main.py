@@ -7,11 +7,6 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
-
-# This program requires LEGO EV3 MicroPython v2.0 or higher.
-# Click "Open user guide" on the EV3 extension tab for more information.
-
-
 # Create your objects here.
 ev3 = EV3Brick()
 gyro = GyroSensor(2)
@@ -20,5 +15,30 @@ right_motor = Motor(3)
 
 robot = DriveBase(left_motor, right_motor, wheel_diameter=56, axle_track=147)
 
-# Write your program here.
+# Track properties
+numOfStraights = 0
+numOfTurns = 0
+
+# Robot speed properties
+targetTime = 0
+straightSpeed = (targetTime - (3 * numOfTurns)) / numOfStraights
+robot.settings(straightSpeed, 0, 30, 0)
+
+gyro.reset_angle(0)
+intendedAngle = 0
+
+# Write your path here.
 ev3.speaker.beep()
+
+# Drive Functions
+def driveHalfBlock():
+    robot.straight(500)
+    robot.turn
+
+def turnLeft():
+    robot.turn(-90)
+    intendedAngle += -90
+
+def turnRight():
+    robot.turn(90)
+    intendedAngle += -90

@@ -14,8 +14,11 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 
 # Create your objects here.
 ev3 = EV3Brick()
-gyro = GyroSensor()
+gyro = GyroSensor(2)
+left_motor = Motor(2)
+right_motor = Motor(3)
 
+robot = DriveBase(left_motor, right_motor, wheel_diameter=56, axle_track=147)
 
 # Write your program here.
 ev3.speaker.beep()

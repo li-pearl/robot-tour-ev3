@@ -17,6 +17,7 @@ right_motor = Motor(Port.C)
 wheel_diameter = 56
 circumference = 3.14159 * wheel_diameter
 robot = DriveBase(left_motor, right_motor, wheel_diameter=57, axle_track=120)
+robot.settings(200, 200, 360, 200)
 
 # Track properties
 # numOfStraights = 1
@@ -26,20 +27,6 @@ numOfTurns = 0
 targetTime = 0
 # straightSpeed = (targetTime - (3 * numOfTurns)) / numOfStraights
 #robot.settings(straightSpeed, 0, 30, 0)
-
-intendedAngle = 0
-
-# Drive Functions
-def driveHalfBlock():
-    robot.straight(500)
-
-def turnLeft():
-    robot.turn(-90)
-    intendedAngle += -90
-
-def turnRight():
-    robot.turn(90)
-    intendedAngle += -90
 
 stopwatch = StopWatch()
 
@@ -71,17 +58,17 @@ def cm_to_mm(cm):
     return cm * 10
 
 #probably won't work
-def turn_to_gyro_angle(target_angle, speed):
-    robot.stop()
-    while (gyro.angle() != target_angle):
-        if (gyro.angle() > target_angle):
-            right_motor.run(speed)
-            left_motor.run(-speed)
-        elif (gyro.angle() < target_angle):
-            left_motor.run(speed)
-            right_motor.run(-speed)
-        else:
-            pass
+# def turn_to_gyro_angle(target_angle, speed):
+#     robot.stop()
+#     while (gyro.angle() != target_angle):
+#         if (gyro.angle() > target_angle):
+#             right_motor.run(speed)
+#             left_motor.run(-speed)
+#         elif (gyro.angle() < target_angle):
+#             left_motor.run(speed)
+#             right_motor.run(-speed)
+#         else:
+#             pass
 
 
 #=========Notes===============#
@@ -104,22 +91,23 @@ def turn_to_gyro_angle(target_angle, speed):
 
 #run(speed)
 #Runs the motor at a constant speed
-
-    
-# class DataLog(*headers, name='log', timestamp=True, extension='csv', append=False)
-#     Create a file and log values
-#     log(*values)
-#     Saves one or more values on a new line in the File
-#     Parameters: values(object, object,...)
         
-
 #         If your robot turns not far enough, increase the axle_track value slightly.
 #         If your robot turns too far, decrease the axle_track value slightly.
 
 # When making these adjustments, always adjust the wheel_diameter first, as done above.
-# uppose you make a DriveBase object using two Motor objects called left_motor and right_motor. You cannot use these motors individually while the DriveBase is active.
+# suppose you make a DriveBase object using two Motor objects called left_motor and right_motor. You cannot use these motors individually while the DriveBase is active.
 
 # The DriveBase is active if it is driving, but also when it is actively holding the wheels in place after a straight() or turn() command. To deactivate the DriveBase, call stop().
+
+# def cycle(straights, turn_angle):
+#     i = 0
+#     while i < straights:
+#         robot.straight(250)
+#         i += 1
+#     robot.turn(turn_angle)
+#     total_angle += turn_angle
+#     robot.turn(total_angle - gyro.angle) 
 
 # Write your program here.
 gyro.reset_angle(0)
@@ -128,98 +116,93 @@ time = 0
 dowel_to_robot_offset = 58
 total_angle = 0
 
-total_angle = 0
-robot.straight(250 + dowel_to_robot_offset)
-robot.turn(90)
-total_angle += 90
-robot.turn(total_angle - gyro.angle())
+# Drive Functions
+def driveForwardFourths(numberOfTimes):
+    robot.straight(250 * numberOfTimes - dowel_to_robot_offset)
 
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
+def drivebackwardsFourths(numberOfTimes):
+    robot.straight(-250 * numberOfTimes - dowel_to_robot_offset)
 
-robot.turn(-90)
-total_angle -= 90
-robot.turn(total_angle - gyro.angle())
+def turnLeft():
+    robot.turn(-90)
+    total_angle += -90
+    robot.turn(total_angle - gyro.angle())
 
+def turnRight():
+    robot.turn(90)
+    total_angle += -90
+    robot.turn(total_angle - gyro.angle())
 
+#let it go vroom vroom
 robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(100)
 
-robot.straight(-250)
-robot.straight(-250)
-robot.straight(-250)
-robot.straight(-100)
+ev3.speaker.beep()
 
-robot.turn(-90)
-total_angle -= 90
-robot.turn(total_angle - gyro.angle())
+# stopwatch.reset()
+# robot.turn(90)
+# around 985 ms
+# robot.straight(250)
+# print(stopwatch.time())
 
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
+# robot.straight(250 + dowel_to_robot_offset)
+# robot.turn(-90)
+# total_angle -= 90
+# robot.turn(total_angle - gyro.angle())
 
-robot.turn(90)
-total_angle += 90
-robot.turn(total_angle - gyro.angle())
+# robot.straight(250*4 - dowel_to_robot_offset)
+# robot.turn(90)
+# total_angle += 90
+# robot.turn(total_angle - gyro.angle())
 
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
+# robot.straight(250*3 + dowel_to_robot_offset)
+# robot.straight(100)
 
-robot.turn(-90)
-total_angle -= 90
-robot.turn(total_angle - gyro.angle())
-
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
-
-robot.turn(-90)
-total_angle -= 90
-robot.turn(total_angle - gyro.angle())
-
-robot.straight(250)
-robot.straight(250)
+# robot.straight(-250*3 - dowel_to_robot_offset)
+# robot.straight(-100)
 
 # robot.turn(90)
 # total_angle += 90
 # robot.turn(total_angle - gyro.angle())
 
-robot.straight(-250)
-robot.straight(-250 - dowel_to_robot_offset)
+# robot.straight(250*2 + dowel_to_robot_offset)
+# robot.turn(-90)
+# total_angle -= 90
+# robot.turn(total_angle - gyro.angle())
 
-robot.turn(90)
-total_angle += 90
-robot.turn(total_angle - gyro.angle())
+# robot.straight(250*6)
+# robot.turn(-90)
+# total_angle -= 90
+# robot.turn(total_angle - gyro.angle())
 
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
+# robot.straight(350 - dowel_to_robot_offset)
+# robot.straight(-350 + dowel_to_robot_offset)
 
-robot.turn(-90)
-total_angle -= 90
-robot.turn(total_angle - gyro.angle())
+# robot.straight(-250*4)
+# robot.turn(-90)
+# total_angle -= 90
+# robot.turn(total_angle - gyro.angle())
 
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
+# robot.straight(350 - dowel_to_robot_offset)
+# robot.straight(-350 + dowel_to_robot_offset)
 
 
-robot.turn(-90)
-total_angle -= 90
-robot.turn(total_angle - gyro.angle())
+# robot.turn(90)
+# total_angle += 90
+# robot.turn(total_angle - gyro.angle())
+# robot.straight(250*4 + dowel_to_robot_offset)
 
-robot.straight(250)
-robot.straight(250)
-robot.straight(250)
-robot.straight(250 + dowel_to_robot_offset)
+# robot.turn(-90)
+# total_angle -= 90
+# robot.turn(total_angle - gyro.angle())
 
-ev3.speaker.beep()
+# robot.straight(250*2 -  dowel_to_robot_offset)
+
+
+# robot.turn(-90)
+# total_angle -= 90
+# robot.turn(total_angle - gyro.angle())
+
+
+# robot.straight(250*2 - dowel_to_robot_offset)
+
 

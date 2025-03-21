@@ -10,6 +10,9 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 # Create your objects here.
 ev3 = EV3Brick()
 gyro = GyroSensor(Port.S2)
+
+gyro.mode = 'GYRO-ANG'
+
 # ultrasomic_sensor = UltrasonicSensor(Port.S1)
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
@@ -72,7 +75,7 @@ def cm_to_mm(cm):
 
 
 #=========Notes===============#
-#Field is 200cm by 200 cm
+#Field is 250cm by 200 cm
 #Squares are 50cm by 50cm
 #Centers are 25cm
 
@@ -118,23 +121,58 @@ total_angle = 0
 
 # Drive Functions
 def driveForwardFourths(numberOfTimes):
-    robot.straight(250 * numberOfTimes - dowel_to_robot_offset)
+    robot.straight(250 * numberOfTimes)
 
-def drivebackwardsFourths(numberOfTimes):
-    robot.straight(-250 * numberOfTimes - dowel_to_robot_offset)
+def driveBackwardFourths(numberOfTimes):
+    robot.straight(-250 * numberOfTimes)
 
 def turnLeft():
+    global total_angle
     robot.turn(-90)
     total_angle += -90
     robot.turn(total_angle - gyro.angle())
 
 def turnRight():
+    global total_angle
     robot.turn(90)
-    total_angle += -90
+    total_angle += 90
     robot.turn(total_angle - gyro.angle())
 
 #let it go vroom vroom
-robot.straight(250)
+ev3.speaker.beep()
+robot.straight(250 + dowel_to_robot_offset)
+turnLeft()
+driveForwardFourths(2)
+turnRight()
+driveForwardFourths(6)
+turnRight()
+driveForwardFourths(4)
+turnRight()
+driveForwardFourths(2)
+turnLeft()
+driveForwardFourths(2)
+turnRight()
+driveForwardFourths(2)
+turnLeft()
+driveForwardFourths(2)
+turnLeft()
+driveForwardFourths(1.75)
+driveBackwardFourths(3.75)
+turnLeft()
+driveForwardFourths(0.75)
+driveBackwardFourths(0.75)
+turnRight()
+driveForwardFourths(6)
+turnLeft()
+driveForwardFourths(2)
+turnLeft()
+driveForwardFourths(2)
+turnRight()
+driveForwardFourths(2)
+turnRight()
+driveForwardFourths(2)
+turnLeft()
+driveForwardFourths(4)
 
 ev3.speaker.beep()
 

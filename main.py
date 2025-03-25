@@ -14,18 +14,19 @@ gyro = GyroSensor(Port.S2)
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
 
-# robot statistics
+# setup
+dowel_to_robot_offset = 66
+total_angle = 0
+speedInMMPerSecond = 130
+total_distance = 316
+
+# robot parameters
 wheel_diameter = 55
 circumference = 3.14159 * wheel_diameter
 axle_track = 117
 robot = DriveBase(left_motor, right_motor, wheel_diameter, axle_track)
-robot.settings(200, 200, 360, 200)
+robot.settings(speedInMMPerSecond, 200, 360, 200)
 
-# setup
-dowel_to_robot_offset = 58
-total_angle = 0
-speedInMMPerSecond = 250
-total_distance = 0
 
 # Drive Functions
 def upSquare(numberOfSquares):
@@ -108,9 +109,18 @@ gyro.reset_angle(0)
 
 robot.straight(250 + dowel_to_robot_offset) # initial move
 
+leftSquare(2)
+upSquare(3)
+rightSquare(2)
+downSquare(2)
+rightSquare(2)
+downSquare(1)
+upSquare(1)
+leftSquare(1)
+upSquare(1)
 
+robot.straight(500 + dowel_to_robot_offset) # final move
 
-robot.straight(500 - dowel_to_robot_offset) # final move
 ###
 
 # def driveForwardFourths(numberOfTimes):

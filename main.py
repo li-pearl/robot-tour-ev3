@@ -29,10 +29,31 @@ robot.settings(speedInMMPerSecond, 200, 360, 200)
 
 
 # Drive Functions
+def spinTurn(direction):
+    if direction == "left":
+        while(gyro.angle() < -90):
+            left_motor.run(-speedInMMPerSecond)
+            right_motor.run(speedInMMPerSecond)
+    elif direction == "right":
+        while(gyro.angle() < 90):
+            left_motor.run(speedInMMPerSecond)
+            right_motor.run(-speedInMMPerSecond)
+    else:
+        if(gyro.angle() > 0):
+            while(gyro.angle() > 0):
+                left_motor.run(-speedInMMPerSecond)
+                right_motor.run(speedInMMPerSecond)
+        else:
+            while(gyro.angle() < 0):
+                left_motor.run(speedInMMPerSecond)
+                right_motor.run(-speedInMMPerSecond)
+    robot.stop()
+
 def upSquare(numberOfSquares):
     global total_distance 
-    total_distance += 500 * numberOfSquares
+    total_distance += 100 * numberOfSquares
     if gyro.angle != 0:
+        spinTurn("up")
         robot.turn(-gyro.angle())
         robot.turn(-gyro.angle())
         robot.turn(-gyro.angle())
@@ -51,6 +72,7 @@ def leftSquare(numberOfSquares):
     global total_distance
     total_distance += 500 * numberOfSquares
     if gyro.angle != -90:
+        spinTurn("left")
         robot.turn(-90 - gyro.angle())
         robot.turn(-90 - gyro.angle())
         robot.turn(-90 - gyro.angle())
@@ -69,6 +91,7 @@ def rightSquare(numberOfSquares):
     global total_distance
     total_distance += 500 * numberOfSquares
     if gyro.angle != 90:
+        spinTurn("right")
         robot.turn(90 - gyro.angle())
         robot.turn(90 - gyro.angle())
         robot.turn(90 - gyro.angle())
@@ -87,6 +110,7 @@ def downSquare(numberOfSquares):
     global total_distance
     total_distance -= 500 * numberOfSquares
     if gyro.angle != 0:
+        spinTurn("down")
         robot.turn(-gyro.angle())
         robot.turn(-gyro.angle())
         robot.turn(-gyro.angle())
@@ -107,126 +131,5 @@ ev3.speaker.beep()
 robot.reset()
 gyro.reset_angle(0)
 
-robot.straight(250 + dowel_to_robot_offset) # initial move
-
-leftSquare(2)
-upSquare(3)
-rightSquare(2)
-downSquare(2)
-rightSquare(2)
-downSquare(1)
-upSquare(1)
-leftSquare(1)
-upSquare(1)
-
-robot.straight(500 + dowel_to_robot_offset) # final move
-
-###
-
-# def driveForwardFourths(numberOfTimes):
-#     robot.straight(250 * numberOfTimes)
-
-# def driveBackwardFourths(numberOfTimes):
-#     robot.straight(-250 * numberOfTimes)
-
-# def turnLeft():
-#     global total_angle
-#     robot.turn(-90)
-#     total_angle += -90
-#     robot.turn(total_angle - gyro.angle())
-
-# def turnRight():
-#     global total_angle
-#     robot.turn(90)
-#     total_angle += 90
-#     robot.turn(total_angle - gyro.angle())
-
-# ev3.speaker.beep()
-# robot.straight(250 + dowel_to_robot_offset)
-# turnLeft()
-# driveForwardFourths(2)
-# turnRight()
-# driveForwardFourths(6)
-# turnRight()
-# driveForwardFourths(4)
-# turnRight()
-# driveForwardFourths(2)
-# turnLeft()
-# driveForwardFourths(2)
-# turnRight()
-# driveForwardFourths(2)
-# turnLeft()
-# driveForwardFourths(2)
-# turnLeft()
-# driveForwardFourths(1.75)
-# driveBackwardFourths(3.75)
-# turnLeft()
-# driveForwardFourths(0.75)
-# driveBackwardFourths(0.75)
-# turnRight()
-# driveForwardFourths(6)
-# turnLeft()
-# driveForwardFourths(2)
-# turnLeft()
-# driveForwardFourths(2)
-# turnRight()
-# driveForwardFourths(2)
-# turnRight()
-# driveForwardFourths(2)
-# turnLeft()
-# driveForwardFourths(4)
-
-# ev3.speaker.beep()
-
-# #probably won't work
-# # def turn_to_gyro_angle(target_angle, speed):
-# #     robot.stop()
-# #     while (gyro.angle() != target_angle):
-# #         if (gyro.angle() > target_angle):
-# #             right_motor.run(speed)
-# #             left_motor.run(-speed)
-# #         elif (gyro.angle() < target_angle):
-# #             left_motor.run(speed)
-# #             right_motor.run(-speed)
-# #         else:
-# #             pass
-
-
-# #=========Notes===============#
-# #Field is 250cm by 200 cm
-# #Squares are 50cm by 50cm
-# #Centers are 25cm
-
-
-# # wait(time)
-# # Pauses the user time program for a specified amount of time in ms
-
-# # robot.straight(1000)
-# # Moves the robot straight for 1000mm or 1 m
-
-# # robot.turn(360)
-# # Turns the robot clockwide by 360 degrees
-
-# # robot.turn(-360)
-# # Turns the robot counterclockwise by 360 degrees
-
-# #run(speed)
-# #Runs the motor at a constant speed
-        
-# #         If your robot turns not far enough, increase the axle_track value slightly.
-# #         If your robot turns too far, decrease the axle_track value slightly.
-
-# # When making these adjustments, always adjust the wheel_diameter first, as done above.
-# # suppose you make a DriveBase object using two Motor objects called left_motor and right_motor. You cannot use these motors individually while the DriveBase is active.
-
-# # The DriveBase is active if it is driving, but also when it is actively holding the wheels in place after a straight() or turn() command. To deactivate the DriveBase, call stop().
-
-# def cycle(straights, turn_angle):
-#     i = 0
-#     while i < straights:
-#         robot.straight(250)
-#         i += 1
-#     robot.turn(turn_angle)
-#     total_angle += turn_angle
-#     robot.turn(total_angle - gyro.angle) 
+rightSquare(1)
 
